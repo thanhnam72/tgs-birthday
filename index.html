@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mở Quà Sinh Nhật</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            background-image: url('');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 90%;
+            width: 450px;
+        }
+
+        h1 {
+            color: #e91e63;
+            margin-bottom: 25px;
+            font-size: 2.5em;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        p {
+            font-size: 1.6em;
+            color: #555;
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+
+        #age {
+            font-weight: 700;
+            color: #2196f3;
+            font-size: 2em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .heart {
+            width: 50px;
+            height: 50px;
+            position: relative;
+            margin: 20px auto;
+            animation: pulse 3s infinite;
+        }
+
+        .heart:before,
+        .heart:after {
+            content: "";
+            position: absolute;
+            width: 50px;
+            height: 80px;
+            background-color: #f00;
+            border-radius: 50px 50px 0 0;
+            transform-origin: 0 100%;
+            left: 0;
+            top: 0;
+        }
+
+        .heart:before {
+            transform: rotate(-45deg);
+            left: -25px;
+        }
+
+        .heart:after {
+            transform: rotate(45deg);
+            left: 25px;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            25% {
+                transform: scale(1.1);
+            }
+
+            50% {
+                transform: scale(1);
+            }
+
+            75% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .rabbit {
+            width: 100px;
+            height: 150px;
+            background-image: url('rabbit.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            position: relative;
+            margin: 20px auto;
+            animation: wave 1s infinite alternate;
+        }
+
+        @keyframes wave {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-10px) rotate(10deg);
+            }
+
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+        }
+
+        #birthday-cake {
+            width: 200px;
+            height: 200px;
+            background-image: url('cake.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            margin: 20px auto;
+            cursor: pointer;
+            transition: transform 0.5s ease;
+        }
+
+        #birthday-cake:hover {
+            transform: scale(1.1);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #gift-box {
+            width: 200px;
+            height: 200px;
+            background-image: url('https://ruybangphuonghoang.com/wp-content/uploads/2024/09/hinh-anh-hop-sinh-nhat.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            margin: 20px auto;
+            cursor: pointer;
+            transition: transform 0.5s ease;
+        }
+
+        #gift-box:hover {
+            transform: scale(1.1);
+        }
+
+        .open-box {
+            animation: openBox 2s ease-in-out forwards;
+        }
+
+        @keyframes openBox {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+
+            50% {
+                transform: rotate(-20deg) scale(1.2);
+            }
+
+            100% {
+                transform: rotate(0deg) scale(1.5);
+            }
+        }
+
+        #message {
+            font-size: 1.8em;
+            color: #ff6f61;
+            margin-top: 30px;
+            animation: fadeIn 2s ease-in-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.5em;
+            }
+
+            p {
+                font-size: 1.2em;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .heart {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        #shoes-img {
+            width: 200px;
+            height: 200px;
+            background-image: url('https://www.charleskeith.vn/dw/image/v2/BCWJ_PRD/on/demandware.static/-/Sites-vn-products/default/dw25738513/images/hi-res/2025-L2-CK1-60361556-B8-1.jpg?sw=756&sh=1008');
+            background-size: contain;
+            background-repeat: no-repeat;
+            margin: 20px auto;
+            cursor: pointer;
+            transition: transform 0.5s ease;
+        }
+
+        #shoes-img:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="greeting"></h1>
+        <p id="age"></p>
+        <div class="heart"></div>
+        <div class="rabbit"></div>
+        <div id="gift-box" onclick="openGift()"></div>
+        <div id="shoes-img" class="hidden"></div>
+        <p id="message" class="hidden"></p>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const greetingElement = document.getElementById('greeting');
+            const ageElement = document.getElementById('age');
+            const tenNguoiYeu = "Người yêu";
+
+            greetingElement.textContent = `Chúc mừng sinh nhật ${tenNguoiYeu} yêu dấu!`;
+            ageElement.textContent = `Chúc bạn sinh nhật đầy ắp những sự yêu thương, mau ăn chóng giàu và phải thật hạnh phúc nhé.`;
+        });
+
+        function openGift() {
+            const giftBox = document.getElementById('gift-box');
+            const shoesImg = document.getElementById('shoes-img');
+            const messageElement = document.getElementById('message');
+
+            giftBox.classList.add('open-box');
+            giftBox.classList.remove('heart');
+            messageElement.classList.remove('hidden');
+
+            setTimeout(() => {
+                shoesImg.classList.remove('hidden');
+                messageElement.textContent = "Chúc mừng sinh nhật! Món quà đặc biệt của bạn đây!";
+            }, 2000);
+            setTimeout(() => {
+                giftBox.style.display = 'none';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

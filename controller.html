@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang web 8 nút</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            background-image: url('');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 90%;
+            width: 450px;
+        }
+
+        h1 {
+            color: #e91e63;
+            margin-bottom: 25px;
+            font-size: 2.5em;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        p {
+            font-size: 1.6em;
+            color: #555;
+            margin-bottom: 30px;
+            line-height: 1.7;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .custom-button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+        }
+
+        .custom-button:hover {
+            background-color: #367c39;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .custom-button:active {
+            background-color: #2b5e2e;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            transform: translateY(0);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="button-grid">
+            <button class="custom-button" id="showIndexPageBtn">Show Index.html</button>
+            <button class="custom-button" id="showStartPageBtn">Show Start.html</button>
+            <button class="custom-button" id="showClogsBtn">Gift clogs</button>
+            <button class="custom-button" id="showNecklaceBtn">Gift necklace</button>
+            <button class="custom-button">Nút 5</button>
+            <button class="custom-button">Nút 6</button>
+            <button class="custom-button">Nút 7</button>
+            <button class="custom-button">Nút 8</button>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBSfXP2yY3F6L43z5-KFVM1ej7JU5O-J1o",
+            authDomain: "my-birthday-d03e7.firebaseapp.com",
+            projectId: "my-birthday-d03e7",
+            storageBucket: "my-birthday-d03e7.firebasestorage.app",
+            messagingSenderId: "1087751692651",
+            appId: "1:1087751692651:web:af41ee3618cbfa59d42c2e",
+            measurementId: "G-QP6WCV3PCW"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.getElementById("showIndexPageBtn").addEventListener("click", () => {
+            const docRef = doc(db, "messages", "yR0RAQ2D3CqrAqPgONDZ");
+            updateDoc(docRef, {
+                type: "redirect",
+                value: "/tgs-birthday/index.html"
+            });
+        });
+
+        document.getElementById("showStartPageBtn").addEventListener("click", () => {
+            const docRef = doc(db, "messages", "yR0RAQ2D3CqrAqPgONDZ");
+            updateDoc(docRef, {
+                type: "redirect",
+                value: "/tgs-birthday/start.html"
+            });
+        });
+
+        document.getElementById("showClogsBtn").addEventListener("click", () => {
+            const docRef = doc(db, "messages", "GOpwAoZtJnNMWlhnbH4Q");
+            updateDoc(docRef, {
+                type: "gift",
+                value: "giay.png"
+            });
+        });
+
+        document.getElementById("showNecklaceBtn").addEventListener("click", () => {
+            const docRef = doc(db, "messages", "GOpwAoZtJnNMWlhnbH4Q");
+            updateDoc(docRef, {
+                type: "gift",
+                value: "day-chuyen.jpg"
+            });
+        });
+    </script>
+</body>
+</html>

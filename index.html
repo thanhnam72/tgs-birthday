@@ -224,7 +224,7 @@
         #shoes-img {
             width: 200px;
             height: 200px;
-            background-image: url('https://www.charleskeith.vn/dw/image/v2/BCWJ_PRD/on/demandware.static/-/Sites-vn-products/default/dw25738513/images/hi-res/2025-L2-CK1-60361556-B8-1.jpg?sw=756&sh=1008');
+            background-image: url('images/giay.png');
             background-size: contain;
             background-repeat: no-repeat;
             margin: 20px auto;
@@ -254,7 +254,7 @@
             const tenNguoiYeu = "";
 
             greetingElement.textContent = `Chúc mừng sinh nhật`;
-            ageElement.textContent = `Trần Thị Mỹ Trinh.`;
+            ageElement.textContent = `Trần Thị Mỹ Trinh`;
         });
 
         function openGift() {
@@ -268,12 +268,53 @@
 
             setTimeout(() => {
                 shoesImg.classList.remove('hidden');
-                messageElement.textContent = "Chúc mừng sinh nhật! Món quà đặc biệt của bạn đây!";
+                messageElement.textContent = "Chúc mừng sinh nhật! Món quà đặc biệt của bé yêu đây!";
             }, 2000);
             setTimeout(() => {
                 giftBox.style.display = 'none';
             }, 2000);
         }
+    </script>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBSfXP2yY3F6L43z5-KFVM1ej7JU5O-J1o",
+            authDomain: "my-birthday-d03e7.firebaseapp.com",
+            projectId: "my-birthday-d03e7",
+            storageBucket: "my-birthday-d03e7.firebasestorage.app",
+            messagingSenderId: "1087751692651",
+            appId: "1:1087751692651:web:af41ee3618cbfa59d42c2e",
+            measurementId: "G-QP6WCV3PCW"
+        };
+    
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const messagesRef = collection(db, "/messages");
+
+        onSnapshot(messagesRef, (snapshot) => {
+            snapshot.docChanges().forEach((change) => {
+                if (change.type === "added") {
+                    console.log("Thêm mới:", change.doc.data());
+                }
+                if (change.type === "modified") {
+                    console.log("modified:", change.doc.data());
+                    const item = change.doc.data();
+                    if(item.type === 'redirect') {
+                        window.location.href = window.location.origin + item.value;
+                    }
+                    else if(item.type === 'gift') {
+                        const gift = document.getElementById("shoes-img");
+                        gift.style.backgroundImage = `url('${window.location.origin}/${item.value}')`;
+                    }
+                }
+            });
+        });
     </script>
 </body>
 </html>

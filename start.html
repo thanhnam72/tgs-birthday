@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600&display=swap" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <!-- <audio autoplay="autopaly">
+      <source src="renxi.mp3" type="audio/mp3" />
+    </audio> -->
+    <!-- 星空html -->
+    <!-- <div> -->
+
+    </div>
+    <!-- </div> -->
+    <div class="title">
+      <!-- EDIT HERE -->
+      <h3 class="STARDUST1">2025</h3>
+      <h1 class="STARDUST2">Lý Nam &amp; Mỹ Trinh</h1>
+      <h3 class="STARDUST3">L O V E <strong>❤</strong> Y O U</h3>
+      <img class="img" src="images/my-girl.jpg" alt="JUNO_OKYO" />
+      <canvas id="pinkboard"></canvas>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/particle.js"></script>
+    <script src="js/universe.js"></script>
+    
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+      import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBSfXP2yY3F6L43z5-KFVM1ej7JU5O-J1o",
+        authDomain: "my-birthday-d03e7.firebaseapp.com",
+        projectId: "my-birthday-d03e7",
+        storageBucket: "my-birthday-d03e7.firebasestorage.app",
+        messagingSenderId: "1087751692651",
+        appId: "1:1087751692651:web:af41ee3618cbfa59d42c2e",
+        measurementId: "G-QP6WCV3PCW"
+      };
+    
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      const messagesRef = collection(db, "/messages");
+
+      onSnapshot(messagesRef, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === "modified") {
+            console.log("modified:", change.doc.data());
+            const item = change.doc.data();
+            if(item.type === 'redirect') {
+              window.location.href = window.location.origin + item.value;
+            }
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

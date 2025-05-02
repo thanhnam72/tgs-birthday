@@ -133,9 +133,9 @@
         }
 
         #birthday-cake {
-            width: 200px;
-            height: 200px;
-            background-image: url('cake.png');
+            width: 300px;
+            height: 300px;
+            background-image: url('images/cake.gif');
             background-size: contain;
             background-repeat: no-repeat;
             margin: 20px auto;
@@ -235,14 +235,60 @@
         #shoes-img:hover {
             transform: scale(1.1);
         }
+
+        #greeting {
+            font-family: 'AmsterdamOne', sans-serif;
+            color: #e91e63;
+            font-size: 2.5em;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 2s ease-in-out, colorChange 2s infinite alternate, waveText 2s infinite alternate;
+            display: inline-block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes colorChange {
+            from {
+                color: #e91e63;
+            }
+            to {
+                color: #ff4081;
+            }
+        }
+        @keyframes waveText {
+            0% {
+                transform: rotateX(0deg);
+            }
+            50% {
+                transform: rotateX(20deg);
+            }
+            100% {
+                transform: rotateX(0deg);
+            }
+        }
+        @font-face {
+            font-family: 'AmsterdamOne';
+            src: url('AmsterdamOne-eZ12l.ttf') format('ttf');
+            font-weight: normal;
+            font-style: normal;
+            display: swap;
+        }
     </style>
 </head>
 <body>
+    <audio src="mp3/hbd2.mp3" id="myAudio" muted loop></audio>
     <div class="container">
         <h1 id="greeting"></h1>
         <p id="age"></p>
-        <div class="heart"></div>
-        <div class="rabbit"></div>
+        <div id="birthday-cake"></div>
+        <!-- <div class="rabbit"></div> -->
         <div id="gift-box" onclick="openGift()"></div>
         <div id="shoes-img" class="hidden"></div>
         <p id="message" class="hidden"></p>
@@ -311,6 +357,11 @@
                     else if(item.type === 'gift') {
                         const gift = document.getElementById("shoes-img");
                         gift.style.backgroundImage = `url('${window.location.origin}/${item.value}')`;
+                    }
+                    else if(item.type === 'audio') {
+                        const audio = document.getElementById("myAudio");
+                        audio.muted = false;
+                        audio.play();
                     }
                 }
             });

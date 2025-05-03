@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Web Quà Tặng</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        #drop-area {
+            border: 2px dashed #cbd5e0;
+            min-height: 150px;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 0.5rem;
+            background-color: #f7fafc;
+            text-align: center;
+            color: #4a5568;
+        }
+        #drop-area.dragover {
+            background-color: #edf2f7;
+            border-color: #90caf9;
+        }
+        .gift-item {
+            cursor: grab;
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            margin: 8px;
+            border-radius: 0.375rem;
+            background-color: #fff;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .gift-item:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 6px 8px -2px rgba(0, 0, 0, 0.15), 0 3px 7px -3px rgba(0, 0, 0, 0.07);
+        }
+        .gift-item:active {
+            transform: translateY(0) scale(1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .dropped-item {
+            background-color: #f0f4c3;
+            border: 1px solid #e6ee96;
+            padding: 8px;
+            margin: 5px;
+            display: inline-block;
+            border-radius: 0.375rem;
+        }
+
+        #save-button {
+            margin-top: 20px;
+        }
+
+        .drop-column {
+            width: 48%; /* Chia đôi chiều ngang, có thể điều chỉnh */
+            float: left;
+            margin-right: 2%; /* Khoảng cách giữa hai cột */
+            border: 2px dashed #cbd5e0;
+            min-height: 150px;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 0.5rem;
+            background-color: #f7fafc;
+            text-align: center;
+            color: #4a5568;
+        }
+
+        .drop-column.dragover {
+            background-color: #edf2f7;
+            border-color: #90caf9;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-100 p-6">
+    <audio src="mp3/hbd2.mp3" id="myAudio" muted loop></audio>
+    <h1 class="text-2xl font-semibold text-gray-800 mb-4">Danh sách Quà tặng</h1>
+    <div id="gift-list" class="flex flex-wrap gap-4">
+        <div class="gift-item" draggable="true" data-id="1" data-name="Bánh kem">Bánh kem</div>
+        <div class="gift-item" draggable="true" data-id="2" data-name="Hoa tươi">Hoa tươi</div>
+        <div class="gift-item" draggable="true" data-id="3" data-name="Gấu bông">Gấu bông</div>
+        <div class="gift-item" draggable="true" data-id="4" data-name="Socola">Socola</div>
+        <div class="gift-item" draggable="true" data-id="5" data-name="Nến thơm">Nến thơm</div>
+        <div class="gift-item" draggable="true" data-id="6" data-name="Nước hoa">Nước hoa</div>
+        <div class="gift-item" draggable="true" data-id="7" data-name="Giầy cao gót">Giầy cao gót</div>
+        <div class="gift-item" draggable="true" data-id="8" data-name="Dây chuyền">Dây chuyền</div>
+        <div class="gift-item" draggable="true" data-id="9" data-name="Chuột máy tính">Chuột máy tính</div>
+        <div class="gift-item" draggable="true" data-id="10" data-name="Màn hình">Màn hình</div>
+    </div>
+
+    <h2 class="text-xl font-semibold text-gray-800 mt-8 mb-4">Giỏ quà của bạn</h2>
+    <div style="overflow: auto; width: 100%;">
+        <div id="like-area" class="drop-column">Món quà yêu thích</div>
+        <div id="dislike-area" class="drop-column">Món quà không thích</div>
+    </div>
+
+    <div class="mt-6">
+        <label for="most-desired-gift" class="block text-gray-700 text-sm font-bold mb-2">Món quà mong muốn nhất:</label>
+        <input type="text" id="most-desired-gift" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Nhập tên món quà bạn muốn...">
+    </div>
+
+    <button id="save-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4">Lưu</button>
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4" onclick="onNext()">Tiếp Theo</button>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js';
+        import { getFirestore, collection, addDoc, onSnapshot } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
+
+        // TODO: Thay thế bằng thông tin cấu hình Firebase của bạn
+        const firebaseConfig = {
+            apiKey: "AIzaSyBSfXP2yY3F6L43z5-KFVM1ej7JU5O-J1o",
+            authDomain: "my-birthday-d03e7.firebaseapp.com",
+            projectId: "my-birthday-d03e7",
+            storageBucket: "my-birthday-d03e7.firebasestorage.app",
+            messagingSenderId: "1087751692651",
+            appId: "1:1087751692651:web:af41ee3618cbfa59d42c2e",
+            measurementId: "G-QP6WCV3PCW"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const giftList = document.getElementById('gift-list');
+        const likeArea = document.getElementById('like-area');
+        const dislikeArea = document.getElementById('dislike-area');
+        const saveButton = document.getElementById('save-button');
+        const mostDesiredGiftInput = document.getElementById('most-desired-gift'); // Get the input element
+
+        let draggedItem = null;
+
+        giftList.addEventListener('dragstart', (event) => {
+            draggedItem = event.target;
+            event.dataTransfer.setData('text/plain', draggedItem.dataset.id);
+            draggedItem.classList.add('dragging');
+        });
+
+        giftList.addEventListener('dragend', (event) => {
+            if (draggedItem) {
+                draggedItem.classList.remove('dragging');
+            }
+        });
+
+        likeArea.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            likeArea.classList.add('dragover');
+        });
+
+        likeArea.addEventListener('dragleave', (event) => {
+            event.preventDefault();
+            likeArea.classList.remove('dragover');
+        });
+
+        likeArea.addEventListener('drop', (event) => {
+            event.preventDefault();
+            likeArea.classList.remove('dragover');
+
+            if (draggedItem) {
+                const newItem = draggedItem.cloneNode(true);
+                newItem.classList.add('dropped-item');
+                newItem.removeAttribute('draggable');
+                likeArea.appendChild(newItem);
+                draggedItem = null;
+            }
+        });
+
+        dislikeArea.addEventListener('dragover', (event) => {
+            event.preventDefault();
+            dislikeArea.classList.add('dragover');
+        });
+
+        dislikeArea.addEventListener('dragleave', (event) => {
+            event.preventDefault();
+            dislikeArea.classList.remove('dragover');
+        });
+
+        dislikeArea.addEventListener('drop', (event) => {
+            event.preventDefault();
+            dislikeArea.classList.remove('dragover');
+
+            if (draggedItem) {
+                const newItem = draggedItem.cloneNode(true);
+                newItem.classList.add('dropped-item');
+                newItem.removeAttribute('draggable');
+                dislikeArea.appendChild(newItem);
+                draggedItem = null;
+            }
+        });
+
+        saveButton.addEventListener('click', async () => {
+            const likeItems = document.querySelectorAll('#like-area .gift-item');
+            const dislikeItems = document.querySelectorAll('#dislike-area .gift-item');
+            const cartItems = {
+                like: [],
+                dislike: [],
+                mostDesired: mostDesiredGiftInput.value // Get the value from the input
+            };
+
+            likeItems.forEach(item => {
+                cartItems.like.push({
+                    id: item.dataset.id,
+                    name: item.dataset.name
+                });
+            });
+
+            dislikeItems.forEach(item => {
+                cartItems.dislike.push({
+                    id: item.dataset.id,
+                    name: item.dataset.name
+                });
+            });
+
+            try {
+                const docRef = await addDoc(collection(db, 'gifts'), {
+                    items: cartItems,
+                    timestamp: new Date()
+                });
+                console.log("Đã lưu giỏ quà với ID: ", docRef.id);
+                alert("Giỏ quà của bạn đã được lưu thành công!");
+                likeArea.innerHTML = 'Món quà yêu thích';
+                dislikeArea.innerHTML = 'Món quà không thích';
+                mostDesiredGiftInput.value = ''; // Clear the input after saving
+            } catch (error) {
+                console.error("Lỗi khi lưu giỏ quà: ", error);
+                alert("Đã có lỗi xảy ra khi lưu giỏ quà.");
+            }
+        });
+
+        const messagesRef = collection(db, "/messages");
+
+        onSnapshot(messagesRef, (snapshot) => {
+            snapshot.docChanges().forEach((change) => {
+                if (change.type === "modified") {
+                    console.log("modified:", change.doc.data());
+                    const item = change.doc.data();
+                    if(item.type === 'redirect') {
+                        window.location.href = window.location.origin + item.value;
+                    }
+                    else if(item.type === 'audio') {
+                        const audio = document.getElementById("myAudio");
+                        audio.muted = false;
+                        audio.play();
+                    }
+                }
+            });
+        });
+    </script>
+    <script>
+        function onNext() {
+            window.location.href = "https://thanhnam72.github.io/tgs-birthday/index.html";
+        }
+    </script>
+</body>
+</html>

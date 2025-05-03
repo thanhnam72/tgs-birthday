@@ -82,6 +82,8 @@
 </head>
 <body>
     <div class="container">
+        <div id="noted">
+        </div>
         <div class="button-grid">
             <button class="custom-button" id="showIndexPageBtn">Show Index.html</button>
             <button class="custom-button" id="showStartPageBtn">Show Start.html</button>
@@ -113,6 +115,20 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        const messagesRef = collection(db, "/gifts");
+
+        onSnapshot(messagesRef, (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+                if (change.type === "added") {
+                    console.log("modified:", change.doc.data());
+                    const noted = document.getElementById("noted");
+                    const item = change.doc.data();
+                    noted.innerHTML = `<p>Most desired: ${item.items.mostDesired}</p>`;
+                    noted.innerHTML += `<p>Like: ${item.items.like.map(x => x.name).toString()}</p>`;
+                    noted.innerHTML += `<p>Dislike: ${item.items.dislike.map(x => x.name).toString()}</p>`;
+                }
+            });
+        });
         document.getElementById("showIndexPageBtn").addEventListener("click", () => {
             const docRef = doc(db, "messages", "yR0RAQ2D3CqrAqPgONDZ");
             updateDoc(docRef, {
